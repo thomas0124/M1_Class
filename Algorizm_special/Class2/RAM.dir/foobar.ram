@@ -1,0 +1,121 @@
+; ---------- 初期データの格納 ----------
+LOAD =5
+STORE 20
+LOAD =20
+STORE 21
+LOAD =10
+STORE 22
+LOAD =15
+STORE 23
+LOAD =7
+STORE 24
+
+; ---------- 作業用変数の初期化 ----------
+LOAD =0
+STORE 3        ; 一時格納A
+STORE 4        ; 一時格納B
+STORE 30       ; フラグ（交換検知用）
+
+; ---------- ソート開始前にデータ出力 ----------
+WRITE 20
+WRITE 21
+WRITE 22
+WRITE 23
+WRITE 24
+WRITE =8888    ; ソート開始マーカー
+
+; ---------- ソートループ ----------
+loop_start:
+    LOAD =0
+    STORE 30       ; フラグ初期化（0: 交換なし）
+
+    ; 比較と交換のループ
+    LOAD 20
+    SUB 21
+    JGTZ swap0
+
+skip0:
+    LOAD 21
+    SUB 22
+    JGTZ swap1
+
+skip1:
+    LOAD 22
+    SUB 23
+    JGTZ swap2
+
+skip2:
+    LOAD 23
+    SUB 24
+    JGTZ swap3
+
+skip3:
+    ; フラグを確認して終了判定
+    LOAD 30
+    JGTZ loop_start   ; フラグ=1ならもう1周
+
+    ; フラグが0→交換なし→終了
+    JUMP done
+
+; ---------- 各比較ペアの交換処理 ----------
+swap0:
+    LOAD =1
+    STORE 30          ; 交換フラグON
+
+    LOAD 20
+    STORE 3
+    LOAD 21
+    STORE 4
+    STORE 20
+    LOAD 3
+    STORE 21
+    JUMP skip0
+
+swap1:
+    LOAD =1
+    STORE 30
+
+    LOAD 21
+    STORE 3
+    LOAD 22
+    STORE 4
+    STORE 21
+    LOAD 3
+    STORE 22
+    JUMP skip1
+
+swap2:
+    LOAD =1
+    STORE 30
+
+    LOAD 22
+    STORE 3
+    LOAD 23
+    STORE 4
+    STORE 22
+    LOAD 3
+    STORE 23
+    JUMP skip2
+
+swap3:
+    LOAD =1
+    STORE 30
+
+    LOAD 23
+    STORE 3
+    LOAD 24
+    STORE 4
+    STORE 23
+    LOAD 3
+    STORE 24
+    JUMP skip3
+
+; ---------- ソート完了 ----------
+done:
+WRITE =9999     ; 終了マーカー
+WRITE 20
+WRITE 21
+WRITE 22
+WRITE 23
+WRITE 24
+HALT

@@ -1,0 +1,79 @@
+;;****************************************************************
+;; タイトル: ラグランジュの定理
+;; 著者: 清水 透真 (qingshuitouzhen@gmail.com)
+;; 日付: 2025年 4月21日 月曜日 15時22分00秒 JST
+;;****************************************************************
+
+start:
+    LOAD =70
+    STORE 1 ;r1 → 321 ; n
+    LOAD =0
+    STORE 2 ;
+    LOAD 2
+    STORE 3       ;a → 0
+loop_a:
+    WRITE =8888 ; 開始の合図
+    MULT 3        ;aの2乗を計算
+    STORE 4       ;aの2乗を4番地へ
+    SUB 1         ;a² - n を計算
+    JGTZ skip1    ;a² > n なら終了
+    LOAD 1
+    SUB 4
+    STORE 5       ;n1 = n - a²
+    LOAD 3
+    STORE 6       ;b = a (初期値としてaを使う)
+loop_b:
+    MULT 6        ;bの2乗を計算
+    STORE 7       ;bの2乗を7番地へ
+    SUB 5         ;b² - n1 を計算
+    JGTZ skip_a    ;b² > n1 ならaを増やす
+    LOAD 5
+    SUB 7
+    STORE 8       ;n2 = n1 - b²
+    LOAD 6
+    STORE 9       ;c = b (初期値としてbを使う)
+loop_c:
+    MULT 9        ;cの２乗を計算
+    STORE 10      ;cの２乗を10番地へ
+    SUB 8         ;c² - n2 を計算
+    JGTZ skip_b    ;c² > n2 ならbを増やす
+    LOAD 8
+    SUB 10
+    STORE 11      ;n3 = n2 - c²
+    LOAD 9
+    STORE 12      ;d = c (初期値としてcを使う)
+loop_d:
+    MULT 12       ;dの２乗を計算
+    STORE 13      ;dの２乗を13番地へ
+    SUB 11        ;d² - n3 を計算
+    JGTZ skip_c    ;d² > n3 ならcを増やす
+    LOAD 11
+    SUB 13
+    JZERO end_print ;d² → n3 なら終了→結果を出力
+    LOAD 12       ;d++
+    ADD =1
+    STORE 12
+    JUMP loop_d
+skip1:
+    HALT
+skip_a:
+    LOAD 3        ;a++
+    ADD =1
+    STORE 3
+    JUMP loop_a
+skip_b:
+    LOAD 6        ;b++
+    ADD =1
+    STORE 6
+    JUMP loop_b
+skip_c:
+    LOAD 9        ;c++
+    ADD =1
+    STORE 9
+    JUMP loop_c
+end_print:   ;結果を出力する
+    WRITE 3        ;a
+    WRITE 6        ;b
+    WRITE 9        ;c
+    WRITE 12       ;d
+    HALT

@@ -1,0 +1,6 @@
+
+	load =2
+	store 1
+	load =19
+	store 2
+	write 2
