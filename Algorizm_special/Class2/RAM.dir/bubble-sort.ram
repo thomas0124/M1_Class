@@ -1,0 +1,101 @@
+;;****************************************************************
+;; タイトル: バブルソートアルゴリズム
+;; 著者: 清水 透真 (qingshuitouzhen@gmail.com)
+;; 日付: 2025年 4月21日 月曜日 0時02分00秒 JST
+;;****************************************************************
+
+start:
+    LOAD =20
+    STORE 1 ;r1 → 20 ; 配列の開始位置
+loop1:
+    LOAD =0
+    STORE *1 ;r20〜r24 に初期値を格納
+    LOAD 1
+    ADD =1
+    STORE 1
+    SUB =24 ;r1が24を超えるまでループ
+    JGTZ skip1
+    JUMP loop1
+skip1:
+    LOAD =42 ;r20〜r24にデータを格納
+    STORE 20
+    LOAD =13
+    STORE 21
+    LOAD =77
+    STORE 22
+    LOAD =5
+    STORE 23
+    LOAD =30
+    STORE 24
+    LOAD =0
+loop2:
+    WRITE =8888 ; 開始の合図
+    ; --- バブルソート開始 ---
+    ; 配列サイズ = 5, 開始位置 = 20
+    LOAD =0
+    STORE 1        ;  zxx1 → i（外ループ）
+    WRITE 20
+    WRITE 21
+    WRITE 22
+    WRITE 23
+    WRITE 24
+outer_loop:
+    LOAD 1
+    SUB =4        ; i < 4（配列サイズ-1回繰り返す）
+    JZERO end_sort
+    JGTZ end_sort
+    LOAD =0
+    STORE 2        ; r2 → j（内ループ）
+inner_loop: ; j < 4-i の判定をする必要がある
+    LOAD =4
+    SUB 1          ; 4-i
+    STORE 7        ; r7 = 比較回数
+    LOAD 2
+    SUB 7          ; j - (4-i)
+    JZERO inc_i
+    JGTZ inc_i ; r3 → base address + j → アドレスA
+    LOAD =20
+    ADD 2
+    STORE 3 ; r4 → A+1 → 次の要素のアドレス
+    LOAD 3
+    ADD =1
+    STORE 4 ; r5 → *r3（現在の要素）
+    LOAD *3
+    STORE 5 ; r6 → *r4（次の要素）
+    LOAD *4
+    STORE 6 ; 比較：r5 - r6
+    LOAD 5
+    SUB 6
+    JZERO no_swap      ; r5 == r6 → スワップ不要
+    JGTZ do_swap       ; r5 > r6 → スワップ必要
+    JUMP no_swap       ; r5 < r6 → スワップ不要
+do_swap:
+    LOAD 6
+    STORE *3
+    LOAD 5
+    STORE *4
+no_swap:
+    LOAD 2
+    ADD =1
+    STORE 2
+    JUMP inner_loop
+inc_i:
+    LOAD 1
+    ADD =1
+    STORE 1
+    JUMP outer_loop
+end_sort:
+    ; --- 結果出力 ---
+    LOAD =20
+    STORE 7 ; r7 → 出力開始アドレス
+print_loop:
+    WRITE *7
+    LOAD 7
+    ADD =1
+    STORE 7
+    LOAD 7
+    SUB =24
+    JGTZ end_print
+    JUMP print_loop
+end_print:
+    HALT

@@ -1,0 +1,33 @@
+; 初期化
+    SJ r3,r3,L1   ; r3 = 0 (結果 = 0)
+    SJ r3,r2,L1   ; r2 = 0 (カウンタ i = 0)
+    SJ r3,r3,INIT_RESULT ; r3 = 1 に初期化 (結果 = 1)
+
+INIT_RESULT:
+    SJ r3,r4,L2   ; r4 = r3 = 1
+
+; ループ開始
+LOOP:
+    SJ r2,r5,L3   ; r5 = r2 (カウンタ i)
+    SJ r5,r6,L3   ; r6 = r5
+    SJ r6,r1,END  ; if i == n then END
+    SJ r2,r6,L3   ; i++
+    SJ r6,r6,L3
+
+    ; r3 *= r6 を行う（掛け算 = 加算の繰り返し）
+
+    SJ r7,r7,L4   ; r7 = 0 （乗算結果）
+    SJ r3,r8,L5   ; r8 = r3（コピー）
+MUL_LOOP:
+    SJ r6,r6,MUL_END ; if r6 == 0 then end
+    SJ r7,r8,L6      ; r7 += r8
+    SJ r6,r9,L6      ; r6--
+    SJ r9,r9,MUL_LOOP
+
+MUL_END:
+    SJ r7,r3,L3      ; r3 = 掛け算結果
+
+    SJ r2,r2,LOOP
+
+END:
+    ; r3 に最終結果（n!）

@@ -1,0 +1,51 @@
+;;****************************************************************
+;; タイトル: n!プログラム
+;; 著者: 清水 透真 (qingshuitouzhen@gmail.com)
+;; 日付: 2025年 4月21日 月曜日 23時46分00秒 JST
+;;****************************************************************
+
+; r2 → 番号用
+; r3 → 合計用
+; r4, r5, r6 → 一時保存用
+
+LOAD =7
+STORE 1
+    SJ 5,5,mv1 ; 初期設定
+mv1:SJ 5,=1,mv2
+mv2:SJ 2,2,mv3
+mv3:SJ 3,3,mv4
+mv4:SJ 2,5,mv5
+mv5:SJ 3,5,mv6
+mv6:
+start:
+    SJ 5,5,np1; r5 → 番号+1
+np1:SJ 5,=1,np2
+np2:SJ 2,5,np3
+np3:
+    SJ 5,5,mt1 ; コピー
+mt1:SJ 5,2,mt2
+mt2:SJ 4,4,mt3
+mt3:SJ 4,5,mt4
+mt4:
+    SJ 5, 5, nk1
+nk1:SJ 5, 3, nk2
+nk2:SJ 6, 6, nk3
+nk3:SJ 6, 5, nk4
+nk4:SJ 4, =1, skip
+    SJ 0, 0, nk3
+skip:
+    SJ 5,5,mc1 ; 合計の算出
+mc1:SJ 5,6,mc2
+mc2:SJ 3,3,mc3
+mc3:SJ 3,5,mc4
+mc4:
+    SJ 5,5,mf1
+mf1:SJ 5,1,mf2
+mf2:SJ 0,0,mf3
+mf3:SJ 0,5,mf4
+mf4:
+    SJ 0,2,end_print
+    SJ 0,0,start
+end_print:
+    WRITE 3
+    HALT
